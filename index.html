@@ -344,6 +344,14 @@
       @media (prefers-color-scheme: dark) { .plan li .tick { color: var(--accent); } }
       .plan .btn { margin-top: auto; justify-content: center; }
       .pricing-note { margin-top: 22px; color: var(--ink-soft); font-size: 0.93rem; max-width: 46rem; }
+      .addons { margin-top: 40px; }
+      .addons-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 16px; }
+      .addon-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      @media (max-width: 760px) { .addon-grid { grid-template-columns: 1fr; } }
+      .addon { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 26px; display: flex; flex-direction: column; gap: 10px; }
+      .addon h4 { margin: 0; font-family: "Bricolage Grotesque", sans-serif; font-size: 1.15rem; font-weight: 700; }
+      .addon p { color: var(--ink-soft); font-size: 0.95rem; }
+      .addon .btn { align-self: flex-start; margin-top: auto; }
 
       /* ---------- About / Contact ---------- */
       .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: start; }
@@ -543,8 +551,8 @@
       <section id="pricing" style="padding-top:10px;">
         <div class="wrap">
           <div class="section-head">
-            <h2>Simple monthly pricing</h2>
-            <p>Every plan includes full setup: we train your agent on your business, connect it to your number and diary, and test it with you before it goes live. No long contract — rolling monthly, cancel any time.</p>
+            <h2>AI voice agent pricing</h2>
+            <p>Simple monthly plans for your AI phone agent. Every plan includes full setup: we train your agent on your business, connect it to your number and diary, and test it with you before it goes live. No long contract — rolling monthly, cancel any time.</p>
           </div>
           <div class="billing-toggle">
             <span class="opt on" id="optMonthly">Monthly</span>
@@ -557,49 +565,65 @@
           <div class="plans">
             <article class="plan">
               <h3>Starter</h3>
-              <p class="plan-for">One channel, fully handled — for smaller businesses that mainly need the phone answered.</p>
+              <p class="plan-for">For smaller businesses that mainly need the phone answered.</p>
               <div class="price"><span class="amount" data-monthly="£99" data-annual="£83">£99</span><span class="per">/ month</span></div>
               <p class="billed" data-monthly="Billed monthly. Setup included." data-annual="£990 billed once a year. Setup included.">Billed monthly. Setup included.</p>
               <ul>
-                <li><span class="tick">✓</span> 1 agent — voice, WhatsApp or website chat</li>
-                <li><span class="tick">✓</span> Up to 300 calls or conversations a month</li>
+                <li><span class="tick">✓</span> 1 AI voice agent on your number</li>
+                <li><span class="tick">✓</span> <span><strong>200 call minutes</strong> a month (about 70–100 calls)</span></li>
                 <li><span class="tick">✓</span> Appointment booking in your diary</li>
-                <li><span class="tick">✓</span> Call and message summaries by email</li>
+                <li><span class="tick">✓</span> Call summaries by email</li>
                 <li><span class="tick">✓</span> Business-hours or 24/7 cover</li>
               </ul>
-              <a class="btn ghost" href="#book-demo">Start with a free demo</a>
+              <a class="btn ghost" href="#book-demo" data-service="AI voice agent (phone)">Start with a free demo</a>
             </article>
             <article class="plan featured">
               <span class="plan-tag">Most popular</span>
               <h3>Growth</h3>
-              <p class="plan-for">Phone and WhatsApp together — for businesses where missed enquiries mean missed revenue.</p>
+              <p class="plan-for">For busy businesses where every missed call means missed revenue.</p>
               <div class="price"><span class="amount" data-monthly="£199" data-annual="£166">£199</span><span class="per">/ month</span></div>
               <p class="billed" data-monthly="Billed monthly. Setup included." data-annual="£1,990 billed once a year. Setup included.">Billed monthly. Setup included.</p>
               <ul>
-                <li><span class="tick">✓</span> Voice agent + WhatsApp booking agent</li>
-                <li><span class="tick">✓</span> Up to 1,000 calls or conversations a month</li>
-                <li><span class="tick">✓</span> Booking reminders that cut no-shows</li>
+                <li><span class="tick">✓</span> Everything in Starter, plus:</li>
+                <li><span class="tick">✓</span> <span><strong>500 call minutes</strong> a month (about 170–250 calls)</span></li>
+                <li><span class="tick">✓</span> Booking confirmations and reminders by text</li>
                 <li><span class="tick">✓</span> Urgent-call transfer to you or your team</li>
                 <li><span class="tick">✓</span> Monthly performance report</li>
               </ul>
-              <a class="btn" href="#book-demo">Start with a free demo</a>
+              <a class="btn" href="#book-demo" data-service="AI voice agent (phone)">Start with a free demo</a>
             </article>
             <article class="plan">
               <h3>Complete</h3>
-              <p class="plan-for">All three channels working as one front desk — for busy, multi-service or multi-site businesses.</p>
+              <p class="plan-for">For multi-service or multi-site businesses with high call volumes.</p>
               <div class="price"><span class="amount" data-monthly="£349" data-annual="£291">£349</span><span class="per">/ month</span></div>
               <p class="billed" data-monthly="Billed monthly. Setup included." data-annual="£3,490 billed once a year. Setup included.">Billed monthly. Setup included.</p>
               <ul>
-                <li><span class="tick">✓</span> Voice + WhatsApp + website chatbot</li>
-                <li><span class="tick">✓</span> Up to 3,000 calls or conversations a month</li>
-                <li><span class="tick">✓</span> Multiple locations or diaries</li>
+                <li><span class="tick">✓</span> Everything in Growth, plus:</li>
+                <li><span class="tick">✓</span> <span><strong>1,000 call minutes</strong> a month (about 350–500 calls)</span></li>
+                <li><span class="tick">✓</span> Multiple locations, numbers or diaries</li>
                 <li><span class="tick">✓</span> Priority support and agent tuning</li>
                 <li><span class="tick">✓</span> Quarterly review of calls and bookings</li>
               </ul>
-              <a class="btn ghost" href="#book-demo">Start with a free demo</a>
+              <a class="btn ghost" href="#book-demo" data-service="AI voice agent (phone)">Start with a free demo</a>
             </article>
           </div>
-          <p class="pricing-note">Need more volume, a second location, or something not listed — for example an agent that also takes orders or payments? <a href="#contact">Talk to us</a> and we'll quote for exactly what you need. Every plan starts with the free demo, so you hear your agent before you pay anything.</p>
+          <p class="pricing-note"><strong>How minutes work:</strong> most calls last 2–3 minutes, and only talk time counts. If you go over, your agent keeps answering — extra minutes are 25p each, added to your next bill.</p>
+          <p class="pricing-note" style="margin-top:10px;">Need more volume, a second location, or something not listed — for example an agent that also takes orders or payments? <a href="#contact">Talk to us</a> and we'll quote for exactly what you need. Every plan starts with the free demo, so you hear your agent before you pay anything.</p>
+          <div class="addons">
+            <h3 class="addons-title">Also available as separate services</h3>
+            <div class="addon-grid">
+              <article class="addon">
+                <h4>WhatsApp AI Booking Agents</h4>
+                <p>Instant replies on WhatsApp with real diary availability, booking confirmations and reminders. Use it on its own or alongside your voice agent.</p>
+                <a class="btn ghost small" href="#book-demo" data-service="WhatsApp AI booking agent">Ask for a quote</a>
+              </article>
+              <article class="addon">
+                <h4>Website Chatbots</h4>
+                <p>A chat agent trained on your website that answers questions, captures leads and books visitors in-chat — day and night.</p>
+                <a class="btn ghost small" href="#book-demo" data-service="Website chatbot">Ask for a quote</a>
+              </article>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -824,6 +848,15 @@
                 </div>
               </div>
               <div class="field">
+                <label for="inService">Service you're interested in</label>
+                <select id="inService" name="service">
+                  <option>AI voice agent (phone)</option>
+                  <option>WhatsApp AI booking agent</option>
+                  <option>Website chatbot</option>
+                  <option>More than one / not sure yet</option>
+                </select>
+              </div>
+              <div class="field">
                 <label for="inMessage">Anything we should know?</label>
                 <textarea id="inMessage" name="message" rows="3" placeholder="e.g. We miss most calls after 6pm and on Saturdays. We use Cliniko for bookings."></textarea>
               </div>
@@ -870,7 +903,7 @@
             </details>
             <details>
               <summary>How much does it cost after the demo?</summary>
-              <p>Plans are on the <a href="#pricing">pricing section</a> above — from £99 a month, setup included, on a rolling monthly basis with no long contract. If your call volume grows or shrinks, you can move plans at any time.</p>
+              <p>Voice agent plans are on the <a href="#pricing">pricing section</a> above — from £99 a month, setup included, on a rolling monthly basis with no long contract. Each plan includes a set number of call minutes — 200, 500 or 1,000 a month. If you go over, your agent keeps answering and extra minutes are 25p each. If your call volume grows or shrinks, you can move plans at any time. WhatsApp booking agents and website chatbots are priced separately — ask us for a quote.</p>
             </details>
             <details>
               <summary>How do you handle my customers' data?</summary>
@@ -1271,6 +1304,12 @@
         calc();
 
         /* ============ Demo request form ============ */
+        Array.prototype.forEach.call(document.querySelectorAll("[data-service]"), function (a) {
+          a.addEventListener("click", function () {
+            var sel = document.getElementById("inService");
+            if (sel) sel.value = a.getAttribute("data-service");
+          });
+        });
         var form = document.getElementById("demoForm");
         var success = document.getElementById("formSuccess");
         var summary = document.getElementById("successSummary");
@@ -1286,6 +1325,7 @@
             "Business: " + val("inBusiness"),
             "Email: " + val("inEmail"),
             "Phone / WhatsApp: " + (val("inPhone") || "—"),
+            "Service: " + val("inService"),
             "Type of business: " + val("inIndustry"),
             "Calls per week: " + val("inVolume"),
             "Notes: " + (val("inMessage") || "—")
@@ -1368,7 +1408,7 @@
               headers: { "Content-Type": "application/json", "Accept": "application/json" },
               body: JSON.stringify({
                 _subject: subject, name: val("inName"), business: val("inBusiness"), email: val("inEmail"),
-                _replyto: val("inEmail"), phone: val("inPhone"), industry: val("inIndustry"),
+                _replyto: val("inEmail"), phone: val("inPhone"), service: val("inService"), industry: val("inIndustry"),
                 calls_per_week: val("inVolume"), message: val("inMessage")
               })
             }).then(function (res) {
