@@ -12,6 +12,11 @@ var CONFIG = {
   // When filled in it appears in the header, hero, about, contact and footer.
   phone: "",
 
+  // Save demo requests to your private admin page (admin.html).
+  // Needs the free Upstash Redis storage + ADMIN_PASSWORD set up in Vercel (see README).
+  // Until that's done, forms automatically fall back to email.
+  saveLeads: true,
+
   // Free form backend: create a form at formspree.io and paste the ID
   // from its URL (https://formspree.io/f/THIS_PART). When set, demo
   // requests arrive in your inbox directly instead of opening the
@@ -417,6 +422,44 @@ var CONFIG = {
     form.reset();
   });
 
+  var errElInit = document.getElementById("formError");
+  var errDefault = errElInit ? errElInit.innerHTML : "";
+
+  function showThanks() {
+    document.getElementById("successTitle").textContent = "Thanks — your demo request is in";
+    document.getElementById("successText").textContent = "We'll be in touch within one working day to arrange your demo. Here's a copy of what you sent:";
+    form.style.display = "none";
+    var alt = document.getElementById("bookingAlt"); if (alt) alt.hidden = true;
+    success.classList.add("show");
+    success.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+  }
+
+  function mailtoFallback(subject, body) {
+    var href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    form.style.display = "none";
+    var alt = document.getElementById("bookingAlt"); if (alt) alt.hidden = true;
+    success.classList.add("show");
+    success.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+    var mailLink = document.createElement("a");
+    mailLink.href = href;
+    mailLink.style.display = "none";
+    document.body.appendChild(mailLink);
+    mailLink.click();
+    document.body.removeChild(mailLink);
+  }
+
+  function sendFormspree(payload) {
+    return fetch("https://formspree.io/f/" + encodeURIComponent(CONFIG.formspreeId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(payload)
+    }).then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); });
+  }
+
+  if (CONFIG.saveLeads && document.getElementById("formNote")) {
+    document.getElementById("formNote").textContent = "We'll reply within one working day to arrange your demo. We only use your details to respond to this request — see our privacy policy.";
+  }
+
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
     if (!validate()) {
@@ -429,48 +472,50 @@ var CONFIG = {
     var subject = "Demo request — " + val("inBusiness");
     var errEl = document.getElementById("formError");
     errEl.hidden = true;
+    errEl.innerHTML = errDefault;
+    var hp = form.querySelector('input[name="website"]');
+    var payload = {
+      _subject: subject, name: val("inName"), business: val("inBusiness"), email: val("inEmail"),
+      _replyto: val("inEmail"), phone: val("inPhone"), service: val("inService"), industry: val("inIndustry"),
+      calls_per_week: val("inVolume"), message: val("inMessage"),
+      page: ({ "": "Homepage", "index.html": "Homepage", "ai-voice-agents.html": "AI Voice Agents", "whatsapp-booking-agents.html": "WhatsApp Booking Agents", "website-chatbots.html": "Website Chatbots" })[location.pathname.split("/").pop()] || location.pathname, website: hp ? hp.value : ""
+    };
+    var submitBtn = form.querySelector('button[type="submit"]');
+    var oldLabel = submitBtn.textContent;
+    function busy(on) { submitBtn.disabled = on; submitBtn.textContent = on ? "Sending…" : oldLabel; }
 
-    if (CONFIG.formspreeId) {
-      var submitBtn = form.querySelector('button[type="submit"]');
-      var oldLabel = submitBtn.textContent;
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Sending…";
-      fetch("https://formspree.io/f/" + encodeURIComponent(CONFIG.formspreeId), {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({
-          _subject: subject, name: val("inName"), business: val("inBusiness"), email: val("inEmail"),
-          _replyto: val("inEmail"), phone: val("inPhone"), service: val("inService"), industry: val("inIndustry"),
-          calls_per_week: val("inVolume"), message: val("inMessage")
-        })
-      }).then(function (res) {
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        document.getElementById("successTitle").textContent = "Thanks — your demo request is in";
-        document.getElementById("successText").textContent = "We'll be in touch within one working day to arrange your demo. Here's a copy of what you sent:";
-        form.style.display = "none";
-        document.getElementById("bookingAlt").hidden = true;
-        success.classList.add("show");
-        success.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
-      }).catch(function () {
-        errEl.hidden = false;
-      }).then(function () {
-        submitBtn.disabled = false;
-        submitBtn.textContent = oldLabel;
-      });
-      return;
+    // Plan B when our own storage isn't available: Formspree if set up, otherwise the email app.
+    function fallback() {
+      if (CONFIG.formspreeId) {
+        return sendFormspree(payload).then(showThanks).catch(function () { errEl.hidden = false; });
+      }
+      mailtoFallback(subject, body);
     }
 
-    var href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-    form.style.display = "none";
-    document.getElementById("bookingAlt").hidden = true;
-    success.classList.add("show");
-    success.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
-    var mailLink = document.createElement("a");
-    mailLink.href = href;
-    mailLink.style.display = "none";
-    document.body.appendChild(mailLink);
-    mailLink.click();
-    document.body.removeChild(mailLink);
+    if (!CONFIG.saveLeads) { busy(true); Promise.resolve(fallback()).then(function () { busy(false); }); return; }
+
+    busy(true);
+    fetch("/api/demo-request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (d) {
+        if (res.ok && d.ok) {
+          if (CONFIG.formspreeId) sendFormspree(payload).catch(function () {}); // optional email copy
+          showThanks();
+          return;
+        }
+        if (res.status === 400 && d.error) {
+          errEl.textContent = d.error;
+          errEl.hidden = false;
+          return;
+        }
+        return fallback();
+      });
+    }).catch(function () {
+      return fallback();
+    }).then(function () { busy(false); });
   });
 }
 
