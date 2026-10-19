@@ -1,39 +1,30 @@
 # Scale Up Softwares — Company Website
 
-Company website for **Scale Up Softwares**, a UK software company selling
-AI voice calling agents, WhatsApp AI booking agents, and chatbots.
+Website for **Scale Up Softwares**, a UK software company building AI agents
+for businesses.
 
-## Contents
+## Pages
 
-- `index.html` — the full site (hero, sample-call demo, services, pricing,
-  industries, testimonials, cost calculator, FAQ, demo-request form, contact)
-- `privacy.html` — privacy & cookie policy (fill in the [bracketed] details)
+| File | Page |
+|---|---|
+| `index.html` | Homepage — company overview, services, how we work, about, demo form, FAQ, contact |
+| `ai-voice-agents.html` | AI Voice Calling Agents — sample call, features, pricing, calculator |
+| `whatsapp-booking-agents.html` | WhatsApp AI Booking Agents |
+| `website-chatbots.html` | Website Chatbots |
+| `privacy.html` | Privacy & cookie policy |
+
+Shared files used by every page: `styles.css` (design), `site.js` (behaviour
+and settings), `logo-mark.png`, `hero-voice.webp`, plus `logo.png`,
+`og-image.png`, `apple-touch-icon.png`, `sitemap.xml`, `robots.txt`.
 
 ## Site settings
 
-All business details live in one place: the `CONFIG` block near the top of
-the `<script>` at the bottom of `index.html`. Edit the values, save, upload.
-Anything left empty stays hidden on the page.
+All business details live in the `CONFIG` block at the top of `site.js`:
+email, phone, Formspree form ID, booking link, company name/number,
+founder, testimonials. Edit once — every page updates. Anything left empty
+stays hidden.
 
-| Setting | What it does |
-|---|---|
-| `email` | Contact email used in every link and the form |
-| `phone` | Shows your AI-answered number in the header, hero, contact and footer |
-| `formspreeId` | Sends demo requests straight to your inbox (free at formspree.io); empty = opens the visitor's email app |
-| `bookingUrl` | Calendly / Cal.com link so visitors can pick a demo slot |
-| `legalName`, `companyNumber`, `registeredIn` | Legal disclosures required for UK companies |
-| `founderName`, `founderUrl` | Founder shown in the About section |
-| `testimonials` | Adds a "What owners say" section once you add one |
+## Updating the live site
 
-## Run locally
-
-Open `index.html` in any browser, or serve it:
-
-```sh
-python3 -m http.server 8000
-```
-
-## Hosting
-
-GitHub Pages: repo Settings → Pages → Deploy from a branch → `main` → `/ (root)`.
-Upload `index.html`, `privacy.html`, `logo.png`, `og-image.png` and `apple-touch-icon.png` together.
+Upload changed files to the GitHub repository (Add file → Upload files →
+Commit changes). Vercel publishes automatically within a minute.
