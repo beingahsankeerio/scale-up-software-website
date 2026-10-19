@@ -1,0 +1,1 @@
+{"dependencies":{"firebase-admin":"^12.7.0"},"description":"Scale Up Softwares company website (Vercel serverless API uses firebase-admin for lead storage).","name":"scale-up-software-website","private":true,"version":"1.0.0"}
