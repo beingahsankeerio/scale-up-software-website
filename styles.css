@@ -416,3 +416,4 @@ footer a { color: #7cc4ff; }
 .quote-band { display: flex; gap: 24px; align-items: center; justify-content: space-between; flex-wrap: wrap; background: var(--surface); border: 2px solid var(--accent); border-radius: var(--radius); padding: 30px 32px; box-shadow: var(--shadow); }
 .quote-band h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; margin-bottom: 8px; }
 .quote-band p { color: var(--ink-soft); max-width: 44rem; }
+.hp { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; overflow: hidden; }

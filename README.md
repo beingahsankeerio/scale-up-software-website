@@ -28,3 +28,23 @@ stays hidden.
 
 Upload changed files to the GitHub repository (Add file → Upload files →
 Commit changes). Vercel publishes automatically within a minute.
+
+## Demo requests (private admin page)
+
+Every demo form on the site saves requests to a private page:
+**https://www.scaleupsoftwares.co.uk/admin.html** (password protected, hidden from Google).
+
+Files: `admin.html`, `api/demo-request.js` (saves a request), `api/leads.js`
+(private list/update/delete), `api/_store.js` (shared helpers).
+
+### One-time setup in Vercel
+1. Vercel → your project → **Storage** (or **Marketplace**) → **Upstash for Redis** →
+   create a free database → **Connect to project**. This adds the storage settings
+   (`KV_REST_API_URL` / `KV_REST_API_TOKEN`) automatically.
+2. Vercel → project → **Settings → Environment Variables** → add
+   `ADMIN_PASSWORD` = a strong password (at least 12 characters). Tick Production.
+3. **Deployments → ⋯ → Redeploy** so the new settings take effect.
+4. Open `/admin.html`, log in, and send yourself a test request from the website.
+
+Until steps 1–3 are done, forms still work: they fall back to opening the
+visitor's email app (or Formspree, if a Formspree ID is set in `site.js`).

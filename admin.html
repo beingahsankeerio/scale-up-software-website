@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo Requests | Scale Up Softwares</title>
+    <link rel="icon" type="image/png" href="logo-mark.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .admin { padding: 36px 0 70px; }
+      .admin h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; }
+      .muted { color: var(--ink-soft); }
+      .login { max-width: 420px; margin: 60px auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); }
+      .login h1 { font-size: 1.6rem; margin-bottom: 6px; }
+      .login form { display: grid; gap: 12px; margin-top: 18px; }
+      .in { width: 100%; font: inherit; font-size: 1rem; padding: 11px 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+      .in:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+      .err { color: var(--danger); font-size: 0.92rem; min-height: 1.3em; }
+      .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 22px 0 14px; }
+      .toolbar .in { width: auto; flex: 1 1 220px; }
+      .toolbar select.in { flex: 0 0 auto; }
+      .counts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+      .chip { font-size: 0.85rem; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); cursor: pointer; color: var(--ink); }
+      .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .lead { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; margin-bottom: 14px; display: grid; gap: 12px; }
+      .lead.is-new { border-left: 5px solid var(--accent); }
+      .lead-top { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+      .lead-name { font-family: "Bricolage Grotesque", sans-serif; font-size: 1.25rem; font-weight: 700; }
+      .lead-when { font-family: "IBM Plex Mono", monospace; font-size: 0.8rem; color: var(--ink-soft); }
+      .lead-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px 18px; font-size: 0.95rem; }
+      .k { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+      .v { word-break: break-word; }
+      .lead-msg { background: var(--surface-2); border-radius: 10px; padding: 12px 14px; font-size: 0.95rem; white-space: pre-wrap; word-break: break-word; }
+      .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+      .note { flex: 1 1 260px; min-height: 40px; resize: vertical; font-size: 0.92rem; }
+      .btn.danger { background: transparent; color: var(--danger); border-color: var(--line); }
+      .btn.danger:hover { background: var(--surface-2); }
+      .empty { text-align: center; padding: 60px 20px; color: var(--ink-soft); background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); }
+      .saved { font-size: 0.82rem; color: var(--accent-strong); }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="wordmark" href="index.html"><img class="logo-mark" src="logo-mark.png" alt="" width="34" height="34" />Scale Up Softwares</a>
+        <nav class="nav-links" aria-label="Admin">
+          <a href="index.html">View website</a>
+          <button class="btn small ghost" id="logoutBtn" type="button" hidden>Log out</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- LOGIN -->
+      <section class="login" id="loginBox">
+        <h1>Demo requests</h1>
+        <p class="muted">Private area. Enter your admin password to see demo requests sent from the website.</p>
+        <form id="loginForm">
+          <label for="pw" class="k">Admin password</label>
+          <input class="in" id="pw" type="password" autocomplete="current-password" required />
+          <button class="btn" type="submit">Log in</button>
+          <div class="err" id="loginErr" role="alert"></div>
+        </form>
+      </section>
+
+      <!-- LEADS -->
+      <section class="admin" id="leadsBox" hidden>
+        <h1>Demo requests</h1>
+        <p class="muted" id="summary"></p>
+        <div class="counts" id="counts"></div>
+        <div class="toolbar">
+          <input class="in" id="search" type="search" placeholder="Search name, business, email, phone…" />
+          <select class="in" id="serviceFilter" aria-label="Filter by service"><option value="">All services</option></select>
+          <button class="btn small ghost" id="refreshBtn" type="button">Refresh</button>
+          <button class="btn small" id="csvBtn" type="button">Export CSV</button>
+        </div>
+        <div id="list"></div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        "use strict";
+        var pw = "";
+        var leads = [];
+        var statuses = ["New", "Contacted", "Demo booked", "Won", "Lost"];
+        var statusFilter = "";
+        var $ = function (id) { return document.getElementById(id); };
+
+        function store(get, val) {
+          try {
+            if (get) return sessionStorage.getItem("su_admin") || "";
+            if (val) sessionStorage.setItem("su_admin", val); else sessionStorage.removeItem("su_admin");
+          } catch (e) { return ""; }
+        }
+
+        function api(method, query, body) {
+          return fetch("/api/leads" + (query || ""), {
+            method: method,
+            headers: { "x-admin-password": pw, "Content-Type": "application/json" },
+            body: body ? JSON.stringify(body) : undefined,
+            cache: "no-store"
+          }).then(function (r) {
+            return r.json().catch(function () { return {}; }).then(function (d) {
+              if (!r.ok) { var e = new Error(d.error || ("Error " + r.status)); e.status = r.status; throw e; }
+              return d;
+            });
+          });
+        }
+
+        function el(tag, cls, text) {
+          var n = document.createElement(tag);
+          if (cls) n.className = cls;
+          if (text != null) n.textContent = text;
+          return n;
+        }
+
+        function fmtDate(iso) {
+          try { return new Date(iso).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }); } catch (e) { return iso; }
+        }
+
+        function load() {
+          return api("GET").then(function (d) {
+            leads = d.leads || [];
+            statuses = d.statuses || statuses;
+            $("loginBox").hidden = true;
+            $("leadsBox").hidden = false;
+            $("logoutBtn").hidden = false;
+            render();
+          });
+        }
+
+        function matches(l) {
+          var q = $("search").value.trim().toLowerCase();
+          var svc = $("serviceFilter").value;
+          if (statusFilter && l.status !== statusFilter) return false;
+          if (svc && l.service !== svc) return false;
+          if (!q) return true;
+          return [l.name, l.business, l.email, l.phone, l.message, l.industry].join(" ").toLowerCase().indexOf(q) !== -1;
+        }
+
+        function render() {
+          // summary + counts
+          var newCount = leads.filter(function (l) { return l.status === "New"; }).length;
+          $("summary").textContent = leads.length + " request" + (leads.length === 1 ? "" : "s") + " in total · " + newCount + " new";
+          var counts = $("counts"); counts.textContent = "";
+          [""].concat(statuses).forEach(function (s) {
+            var n = s ? leads.filter(function (l) { return l.status === s; }).length : leads.length;
+            var c = el("button", "chip" + (statusFilter === s ? " on" : ""), (s || "All") + " (" + n + ")");
+            c.type = "button";
+            c.addEventListener("click", function () { statusFilter = s; render(); });
+            counts.appendChild(c);
+          });
+          // service filter options
+          var sf = $("serviceFilter"), cur = sf.value;
+          var services = Array.from(new Set(leads.map(function (l) { return l.service; }).filter(Boolean)));
+          while (sf.options.length > 1) sf.remove(1);
+          services.forEach(function (s) { var o = el("option", null, s); o.value = s; sf.appendChild(o); });
+          sf.value = services.indexOf(cur) !== -1 ? cur : "";
+
+          var list = $("list"); list.textContent = "";
+          var shown = leads.filter(matches);
+          if (!shown.length) {
+            list.appendChild(el("div", "empty", leads.length ? "No requests match your filters." : "No demo requests yet. They'll appear here as soon as someone fills in the form."));
+            return;
+          }
+          shown.forEach(function (l) { list.appendChild(card(l)); });
+        }
+
+        function field(grid, k, v, href) {
+          if (!v) return;
+          var w = el("div");
+          w.appendChild(el("div", "k", k));
+          var val;
+          if (href) { val = el("a", "v", v); val.href = href; } else { val = el("div", "v", v); }
+          w.appendChild(val);
+          grid.appendChild(w);
+        }
+
+        function card(l) {
+          var c = el("article", "lead" + (l.status === "New" ? " is-new" : ""));
+          var top = el("div", "lead-top");
+          var t = el("div");
+          t.appendChild(el("div", "lead-name", (l.name || "—") + " · " + (l.business || "—")));
+          top.appendChild(t);
+          top.appendChild(el("div", "lead-when", fmtDate(l.createdAt)));
+          c.appendChild(top);
+
+          var g = el("div", "lead-grid");
+          field(g, "Email", l.email, "mailto:" + encodeURIComponent(l.email).replace("%40", "@") + "?subject=" + encodeURIComponent("Your Scale Up Softwares demo"));
+          field(g, "Phone / WhatsApp", l.phone, l.phone ? "tel:" + l.phone.replace(/[^\d+]/g, "") : null);
+          field(g, "Service", l.service);
+          field(g, "Type of business", l.industry);
+          field(g, "Calls per week", l.callsPerWeek);
+          field(g, "Sent from page", l.page);
+          c.appendChild(g);
+
+          if (l.message) c.appendChild(el("div", "lead-msg", l.message));
+
+          var row = el("div", "row");
+          var sel = el("select", "in");
+          sel.style.width = "auto";
+          sel.setAttribute("aria-label", "Status");
+          statuses.forEach(function (s) { var o = el("option", null, s); o.value = s; sel.appendChild(o); });
+          sel.value = l.status || "New";
+          var saved = el("span", "saved", "");
+          sel.addEventListener("change", function () {
+            api("PATCH", "", { id: l.id, status: sel.value }).then(function () {
+              l.status = sel.value; saved.textContent = "Saved ✓"; setTimeout(render, 500);
+            }).catch(function (e) { alert(e.message); sel.value = l.status; });
+          });
+          var note = el("textarea", "in note");
+          note.placeholder = "Private note (e.g. called Tue, demo booked Fri 3pm)";
+          note.value = l.note || "";
+          note.rows = 1;
+          note.addEventListener("change", function () {
+            api("PATCH", "", { id: l.id, note: note.value }).then(function () {
+              l.note = note.value; saved.textContent = "Note saved ✓";
+            }).catch(function (e) { alert(e.message); });
+          });
+          var del = el("button", "btn small danger", "Delete");
+          del.type = "button";
+          del.addEventListener("click", function () {
+            if (!confirm("Delete the request from " + (l.name || "this person") + "? This can't be undone.")) return;
+            api("DELETE", "?id=" + encodeURIComponent(l.id)).then(function () {
+              leads = leads.filter(function (x) { return x.id !== l.id; }); render();
+            }).catch(function (e) { alert(e.message); });
+          });
+          row.appendChild(sel); row.appendChild(note); row.appendChild(del); row.appendChild(saved);
+          c.appendChild(row);
+          return c;
+        }
+
+        function csv() {
+          var cols = ["createdAt", "status", "name", "business", "email", "phone", "service", "industry", "callsPerWeek", "message", "note", "page"];
+          var esc = function (v) {
+            v = String(v == null ? "" : v);
+            if (/^[=+\-@]/.test(v)) v = "'" + v; // stop spreadsheet formula injection
+            return '"' + v.replace(/"/g, '""') + '"';
+          };
+          var lines = [cols.join(",")].concat(leads.filter(matches).map(function (l) { return cols.map(function (c) { return esc(l[c]); }).join(","); }));
+          var blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+          var a = el("a"); a.href = URL.createObjectURL(blob);
+          a.download = "demo-requests-" + new Date().toISOString().slice(0, 10) + ".csv";
+          document.body.appendChild(a); a.click(); a.remove();
+        }
+
+        $("loginForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          pw = $("pw").value;
+          $("loginErr").textContent = "";
+          load().then(function () { store(false, pw); }).catch(function (err) {
+            $("loginErr").textContent = err.status === 401 ? "Wrong password." : err.message;
+          });
+        });
+        $("logoutBtn").addEventListener("click", function () {
+          store(false, ""); pw = ""; leads = [];
+          $("leadsBox").hidden = true; $("loginBox").hidden = false; $("logoutBtn").hidden = true; $("pw").value = "";
+        });
+        $("search").addEventListener("input", render);
+        $("serviceFilter").addEventListener("change", render);
+        $("refreshBtn").addEventListener("click", function () { load().catch(function (e) { alert(e.message); }); });
+        $("csvBtn").addEventListener("click", csv);
+
+        var remembered = store(true);
+        if (remembered) { pw = remembered; load().catch(function () { store(false, ""); pw = ""; }); }
+      })();
+    </script>
+  </body>
+</html>
