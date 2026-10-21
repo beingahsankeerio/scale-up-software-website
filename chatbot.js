@@ -290,7 +290,7 @@
       return;
     }
     if (has("contact", "human", "person", "talk to", "speak", "email", "number")) {
-      botSay("You can reach our team at <a href='mailto:" + EMAIL + "'>" + EMAIL + "</a> — we reply to every enquiry. Or book a free demo here and we'll come to you.", MAIN_CHIPS);
+      botSay("You can reach our team at <a href='mailto:" + EMAIL + "'>" + EMAIL + "</a>. Or book a free demo here and we'll come to you.", MAIN_CHIPS);
       return;
     }
     if (has("how does it work", "how it works", "setup", "set up", "install", "get started")) {
