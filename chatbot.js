@@ -9,8 +9,6 @@
 
   var ACCENT = "#0a66e8";
   var EMAIL = "hello@scaleupsoftwares.co.uk";
-  var PHONE_DISPLAY = "+44 7348 270 533";
-  var PHONE_TEL = "+447348270533";
 
   var SERVICES = {
     voice: {
@@ -215,11 +213,11 @@
         if (r.ok && d.ok) {
           botSay("Done ✅ Your demo request is in, " + escapeHtml(lead.name.split(" ")[0]) + ". Our team will be in touch shortly to arrange it. Anything else I can help with?", MAIN_CHIPS, 300);
         } else {
-          botSay("Hmm, that didn't go through. You can reach us directly at <a href='mailto:" + EMAIL + "'>" + EMAIL + "</a> or on <a href='tel:" + PHONE_TEL + "'>" + PHONE_DISPLAY + "</a> — sorry about that!", MAIN_CHIPS, 300);
+          botSay("Hmm, that didn't go through. You can reach us directly at <a href='mailto:" + EMAIL + "'>" + EMAIL + "</a> — sorry about that!", MAIN_CHIPS, 300);
         }
       });
     }).catch(function () {
-      botSay("Hmm, that didn't go through. You can reach us directly at <a href='mailto:" + EMAIL + "'>" + EMAIL + "</a> or on <a href='tel:" + PHONE_TEL + "'>" + PHONE_DISPLAY + "</a>.", MAIN_CHIPS, 300);
+      botSay("Hmm, that didn't go through. You can reach us directly at <a href='mailto:" + EMAIL + "'>" + EMAIL + "</a>.", MAIN_CHIPS, 300);
     });
   }
 
@@ -292,7 +290,7 @@
       return;
     }
     if (has("contact", "human", "person", "talk to", "speak", "email", "number")) {
-      botSay("You can reach our team at <a href='mailto:" + EMAIL + "'>" + EMAIL + "</a> or call <a href='tel:" + PHONE_TEL + "'>" + PHONE_DISPLAY + "</a>. Or book a free demo here and we'll come to you.", MAIN_CHIPS);
+      botSay("You can reach our team at <a href='mailto:" + EMAIL + "'>" + EMAIL + "</a> — we reply to every enquiry. Or book a free demo here and we'll come to you.", MAIN_CHIPS);
       return;
     }
     if (has("how does it work", "how it works", "setup", "set up", "install", "get started")) {
