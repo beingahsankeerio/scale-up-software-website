@@ -417,3 +417,22 @@ footer a { color: #7cc4ff; }
 .quote-band h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; margin-bottom: 8px; }
 .quote-band p { color: var(--ink-soft); max-width: 44rem; }
 .hp { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; overflow: hidden; }
+
+/* ---- Blog ---- */
+.post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; margin-top: 28px; }
+.post-card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.post-card .tag { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.post-card h3 { margin: 0; font-size: 1.18rem; line-height: 1.35; }
+.post-card h3 a { color: var(--ink); text-decoration: none; }
+.post-card p { margin: 0; color: var(--ink-soft); font-size: .97rem; }
+.post-card .meta { font-size: .85rem; color: var(--ink-soft); }
+.post-card .more { margin-top: auto; font-weight: 700; color: var(--accent); text-decoration: none; }
+article.post { max-width: 46rem; margin: 0 auto; }
+article.post h1 { font-size: clamp(1.85rem, 4.5vw, 2.65rem); line-height: 1.16; margin-bottom: 0; }
+article.post .meta { color: var(--ink-soft); margin: 12px 0 28px; font-size: .95rem; }
+article.post p, article.post li { font-size: 1.06rem; line-height: 1.75; }
+article.post h2 { margin-top: 1.9em; line-height: 1.25; }
+article.post ul { padding-left: 1.25em; }
+article.post .cta-box { background: var(--bg); border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin: 34px 0; }
+article.post .cta-box h2 { margin-top: 0; }
+article.post .stat { font-weight: 700; color: var(--accent-strong); }
