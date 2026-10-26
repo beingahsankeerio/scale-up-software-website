@@ -10,7 +10,7 @@ var CONFIG = {
 
   // UK phone number answered by your own AI agent, e.g. "020 3000 0000".
   // When filled in it appears in the header, hero, about, contact and footer.
-  phone: "",
+  phone: "+44 7338 320828",
 
   // Save demo requests to your private admin page (admin.html).
   // Needs the free Upstash Redis storage + ADMIN_PASSWORD set up in Vercel (see README).
